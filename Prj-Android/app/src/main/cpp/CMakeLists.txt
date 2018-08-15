@@ -1,37 +1,66 @@
-cmake_minimum_required(VERSION 3.6)
-project(SwiftPR)
+# For more information about using CMake with Android Studio, read the
+# documentation: https://d.android.com/studio/projects/add-native-code.html
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-add_library( lib_opencv SHARED IMPORTED )
+# Sets the minimum version of CMake required to build the native library.
 
+cmake_minimum_required(VERSION 3.4.1)
+#set(OpenCV_DIR /Users/mac02/Downloads/OpenCV-android/sdk/native/jni)
+set(OpenCV_DIR ${CMAKE_CURRENT_SOURCE_DIR}/opencv342/sdk/native/jni)
+#message(STATUS "路径:${CMAKE_CURRENT_SOURCE_DIR}/opencvnative3_4_2/jni}")
+find_package(OpenCV REQUIRED)
+message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
 
-find_library( # Sets the name of the path variable.
-              log-lib
-
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
-
-
-include_directories(/Users/yujinke/Downloads/OpenCV-android-sdk-3.3/sdk/native/jni/include)
-include_directories(include)
-
-set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libopencv_java3.so)
-
-set(SRC_DETECTION src/PlateDetection.cpp  src/util.h include/PlateDetection.h)
-
-set(SRC_FINEMAPPING src/FineMapping.cpp )
-
-set(SRC_FASTDESKEW src/FastDeskew.cpp )
-
-set(SRC_SEGMENTATION src/PlateSegmentation.cpp )
-
-set(SRC_RECOGNIZE src/Recognizer.cpp src/CNNRecognizer.cpp)
-
-set(SRC_PIPLINE src/Pipeline.cpp)
+#include_directories(/Users/mac02/Desktop/studiospace/test/PrjAnndroid/app/src/main/cpp/include)
+#set(pathToOpenCv /Users/mac02/Downloads/OpenCV-android)
+#配置加载native依赖
+#include_directories(${pathToOpenCv}/sdk/native/jni/include)
+#动态方式加载
+#add_library( lib_opencv SHARED IMPORTED )
+#引入libopencv_java3.so文件
+#set_target_properties(lib_opencv PROPERTIES IMPORTED_LOCATION /Users/mac02/Desktop/studiospace/test/PrjAnndroid/app/src/main/jniLibs/armeabi-v7a/libopencv_java3.so)
 
 
+aux_source_directory(. SOURCES1)
+aux_source_directory(./src SOURCES2)
+list (APPEND SOURCES
+     ${SOURCES1}
+     ${SOURCES2}
+)
+message(STATUS "My sources: ${SOURCES}")
+add_library( # Sets the name of the library.
+             hyperlpr
 
-add_library(hyperlpr SHARED  ${SRC_DETECTION} ${SRC_FINEMAPPING} ${SRC_FASTDESKEW} ${SRC_SEGMENTATION} ${SRC_RECOGNIZE} ${SRC_PIPLINE} javaWarpper.cpp)
+             # Sets the library as a shared library.
+             SHARED
 
-target_link_libraries(hyperlpr lib_opencv ${log-lib})
+             # Provides a relative path to your source file(s).
+            ${SOURCES})
+
+
+#target_link_libraries( hyperlpr lib_opencv)
+target_link_libraries(hyperlpr ${OpenCV_LIBS})
+
+
+#连接现成的第三方库
+#set(INC_DIR /Users/mac02/Desktop/studiospace/test/PrjAnndroid/app/src/main/cpp/OpencvNative/include)
+#set(LINK_DIR /Users/mac02/Desktop/studiospace/test/PrjAnndroid/app/src/main/cpp/OpencvNative/libs)
+#include_directories(OpencvNative/jni/include)
+
+#include_directories(${INC_DIR}) # 用${}引用变量
+#link_directories(${LINK_DIR})
+
+#aux_source_directory(./include SOURCES1)
+#aux_source_directory(./src SOURCES2)
+#list (APPEND SOURCES
+#     ${SOURCES1}
+#     ${SOURCES2}
+#    javaWarpper.cpp
+#)
+#add_library( # Sets the name of the library.
+#             hyperlpr
+
+#            # Sets the library as a shared library.
+#             SHARED
+
+             # Provides a relative path to your source file(s).
+#            ${SOURCES})
