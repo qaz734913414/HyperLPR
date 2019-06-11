@@ -138,11 +138,16 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
                 + File.separator+"CharacterRecognization.prototxt";
         String character_caffemodel=  sdcardPath
                 + File.separator+"CharacterRecognization.caffemodel";
+        String segmentationfree_prototxt =  sdcardPath
+                + File.separator+"SegmenationFree-Inception.prototxt";
+        String segmentationfree_caffemodel=  sdcardPath
+                + File.separator+"SegmenationFree-Inception.caffemodel";
         handle  =  PlateRecognition.InitPlateRecognizer(
                 cascade_filename,
                 finemapping_prototxt,finemapping_caffemodel,
                 segmentation_prototxt,segmentation_caffemodel,
-                character_prototxt,character_caffemodel
+                character_prototxt,character_caffemodel,
+                segmentationfree_prototxt,segmentationfree_caffemodel
         );
 
 

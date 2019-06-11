@@ -36,7 +36,8 @@ Java_pr_platerecognization_PlateRecognition_InitPlateRecognizer(
         jstring detector_filename,
         jstring finemapping_prototxt, jstring finemapping_caffemodel,
         jstring segmentation_prototxt, jstring segmentation_caffemodel,
-        jstring charRecognization_proto, jstring charRecognization_caffemodel) {
+        jstring charRecognization_proto, jstring charRecognization_caffemodel,
+        jstring segmentationfree_proto, jstring segmentationfree_caffemodel) {
 
     std::string detector_path = jstring2str(env, detector_filename);
     std::string finemapping_prototxt_path = jstring2str(env, finemapping_prototxt);
@@ -45,12 +46,15 @@ Java_pr_platerecognization_PlateRecognition_InitPlateRecognizer(
     std::string segmentation_caffemodel_path = jstring2str(env, segmentation_caffemodel);
     std::string charRecognization_proto_path = jstring2str(env, charRecognization_proto);
     std::string charRecognization_caffemodel_path = jstring2str(env, charRecognization_caffemodel);
+    std::string segmentationfree_proto_path = jstring2str(env, segmentationfree_proto);
+    std::string segmentationfree_caffemodel_path = jstring2str(env, segmentationfree_caffemodel);
 
 
     pr::PipelinePR *PR = new pr::PipelinePR(detector_path,
                                             finemapping_prototxt_path, finemapping_caffemodel_path,
                                             segmentation_prototxt_path, segmentation_caffemodel_path,
-                                            charRecognization_proto_path, charRecognization_caffemodel_path);
+                                            charRecognization_proto_path, charRecognization_caffemodel_path,
+                                            segmentationfree_proto_path, segmentationfree_caffemodel_path);
 
     return (jlong) PR;
 }
@@ -69,7 +73,7 @@ Java_pr_platerecognization_PlateRecognition_SimpleRecognization(
 //    cv::imwrite("/sdcard/demo.jpg",rgb);
 
     //1表示SEGMENTATION_BASED_METHOD在方法里有说明
-    std::vector<pr::PlateInfo> list_res= PR->RunPiplineAsImage(rgb,1);
+    std::vector<pr::PlateInfo> list_res= PR->RunPiplineAsImage(rgb,pr::SEGMENTATION_FREE_METHOD);
 //    std::vector<pr::PlateInfo> list_res= PR->RunPiplineAsImage(rgb,1);
     std::string concat_results;
     for(auto one:list_res)
