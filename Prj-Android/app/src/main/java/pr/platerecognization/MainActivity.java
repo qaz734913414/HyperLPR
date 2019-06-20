@@ -278,6 +278,7 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
         Imgproc.resize(mat_src,mat_src,sz);
         long currentTime1 = System.currentTimeMillis();
         String res = PlateRecognition.SimpleRecognization(mat_src.getNativeObjAddr(),handle);
+
         long diff = System.currentTimeMillis() - currentTime1;
         resbox.setText("识别结果:"+res);
         runtimebox.setText(String.valueOf(diff)+"ms");
@@ -346,29 +347,6 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
         initRecognizer();
         btn.setOnClickListener(this);
         recogBtn.setOnClickListener(this);
-//
-//        btn.setOnClickListener(new View.OnClickListener() {
-//                                   @Override
-//                                   public void onClick(View view)
-//                                   {
-//
-//
-//                                       Bitmap bmp  = BitmapFactory.decodeResource(getResources(), R.drawable.demo);
-////                                       Bitmap bmp = imgv.setImageBitmap();
-//                                       imgv.setImageBitmap(bmp);
-//                                       Mat mat_src = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
-//
-//                                       Size sz = new Size(720,682);
-//                                       Utils.bitmapToMat(bmp, mat_src);
-//                                       Imgproc.resize(mat_src,mat_src,sz);
-//                                       String res = PlateRecognition.SimpleRecognization(mat_src.getNativeObjAddr(),handle);
-//                                       resbox.setText("识别结果:"+res);
-//
-//                                   }
-//                               }
-//        );
-        // Example of a call to a native method
-//        TextView tv = (TextView) findViewById(R.id);
 
     }
 

@@ -71,14 +71,8 @@ namespace pr {
             {
 
                 image_finemapping = fineMapping->FineMappingHorizon(image_finemapping, 4, HorizontalPadding+3);
-
                 cv::resize(image_finemapping, image_finemapping, cv::Size(136+HorizontalPadding, 36));
-//                cv::imwrite("./test.png",image_finemapping);
-//                cv::imshow("image_finemapping",image_finemapping);
-//                cv::waitKey(0);
                 plateinfo.setPlateImage(image_finemapping);
-//                std::vector<cv::Rect> rects;
-
                 std::pair<std::string,float> res = segmentationFreeRecognizer->SegmentationFreeForSinglePlate(plateinfo.getPlateImage(),pr::CH_PLATE_CODE);
                 plateinfo.confidence = res.second;
                 plateinfo.setPlateName(res.first);

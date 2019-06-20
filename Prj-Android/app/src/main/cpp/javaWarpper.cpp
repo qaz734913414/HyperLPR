@@ -78,9 +78,11 @@ Java_pr_platerecognization_PlateRecognition_SimpleRecognization(
     std::string concat_results;
     for(auto one:list_res)
     {
+        //可信度
         if (one.confidence>0.7)
             concat_results+=one.getPlateName()+",";
     }
+
     concat_results = concat_results.substr(0,concat_results.size()-1);
 
     return env->NewStringUTF(concat_results.c_str());
