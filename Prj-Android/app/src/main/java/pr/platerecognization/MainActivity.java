@@ -19,7 +19,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +26,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -268,7 +266,6 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
 
         float dp_asp  = dp/10.f;
         imgv.setImageBitmap(bmp);
-//        Mat mat_src = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC1);
         Mat mat_src = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
 
         float new_w = bmp.getWidth()*dp_asp;
@@ -277,10 +274,14 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
         Utils.bitmapToMat(bmp, mat_src);
         Imgproc.resize(mat_src,mat_src,sz);
         long currentTime1 = System.currentTimeMillis();
-        String res = PlateRecognition.SimpleRecognization(mat_src.getNativeObjAddr(),handle);
+//        String res = PlateRecognition.SimpleRecognization(mat_src.getNativeObjAddr(),handle);
 
+        PlateInfo plateInfo = PlateRecognition.PlateInfoRecognization(mat_src.getNativeObjAddr(),handle);
+
+//        imgv.setImageBitmap(plateInfo.bitmap);
         long diff = System.currentTimeMillis() - currentTime1;
-        resbox.setText("识别结果:"+res);
+        resbox.setText("识别结果:"+plateInfo.plateName);
+
         runtimebox.setText(String.valueOf(diff)+"ms");
 
 
@@ -302,7 +303,6 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
             latestBitmap = bmp;
 
             SimpleRecog(bmp,sb.getProgress());
-//            startOilPainting(bmp, file);
         } else if (requestCode == REQUEST_CODE_OP) {
             Log.i(TAG, "RESULT =" + resultCode);
             if (data == null) {

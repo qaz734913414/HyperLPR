@@ -16,5 +16,6 @@ public class PlateRecognition {
 
     static native void ReleasePlateRecognizer(long  object);
     static native String SimpleRecognization(long  inputMat,long object);
+    static native PlateInfo PlateInfoRecognization(long  inputMat,long object);
 
 }
