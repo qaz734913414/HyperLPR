@@ -184,25 +184,25 @@ Java_pr_platerecognization_PlateRecognition_PlateInfoRecognization(
         //可信度
         if (one.confidence>0.7) {
             plateInfo = one;
-            break;
+            plateInfo = list_res.at(0);
+            //车牌号
+            jfieldID fid_plate_name  = env->GetFieldID(plateInfo_class,"plateName","Ljava/lang/String;");
+            env->SetObjectField(plateInfoObj,fid_plate_name,env->NewStringUTF(plateInfo.getPlateName().c_str()));
+
+            //识别区域
+            Mat src = plateInfo.getPlateImage();
+
+            jclass java_bitmap_class = (jclass)env->FindClass("android/graphics/Bitmap$Config");
+            jmethodID bitmap_mid = env->GetStaticMethodID(java_bitmap_class,
+                                                          "nativeToConfig", "(I)Landroid/graphics/Bitmap$Config;");
+            jobject bitmap_config = env->CallStaticObjectMethod(java_bitmap_class, bitmap_mid, 5);
+
+            jfieldID fid_bitmap = env->GetFieldID(plateInfo_class, "bitmap","Landroid/graphics/Bitmap;");
+            jobject _bitmap = mat_to_bitmap(env, src, false, bitmap_config);
+            env->SetObjectField(plateInfoObj,fid_bitmap, _bitmap);
+            return plateInfoObj;
         }
     }
-    //车牌号
-    jfieldID fid_plate_name  = env->GetFieldID(plateInfo_class,"plateName","Ljava/lang/String;");
-    env->SetObjectField(plateInfoObj,fid_plate_name,env->NewStringUTF(plateInfo.getPlateName().c_str()));
-
-    //识别区域
-    Mat src = plateInfo.getPlateImage();
-
-    jclass java_bitmap_class = (jclass)env->FindClass("android/graphics/Bitmap$Config");
-    jmethodID bitmap_mid = env->GetStaticMethodID(java_bitmap_class,
-                                                  "nativeToConfig", "(I)Landroid/graphics/Bitmap$Config;");
-    jobject bitmap_config = env->CallStaticObjectMethod(java_bitmap_class, bitmap_mid, 5);
-
-    jfieldID fid_bitmap = env->GetFieldID(plateInfo_class, "bitmap","Landroid/graphics/Bitmap;");
-    jobject _bitmap = mat_to_bitmap(env, src, false, bitmap_config);
-    env->SetObjectField(plateInfoObj,fid_bitmap, _bitmap);
-
     return plateInfoObj;
 
 }

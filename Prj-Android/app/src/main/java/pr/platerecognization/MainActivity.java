@@ -275,12 +275,12 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
         Imgproc.resize(mat_src,mat_src,sz);
         long currentTime1 = System.currentTimeMillis();
 //        String res = PlateRecognition.SimpleRecognization(mat_src.getNativeObjAddr(),handle);
+//        resbox.setText("识别结果:"+res);
 
         PlateInfo plateInfo = PlateRecognition.PlateInfoRecognization(mat_src.getNativeObjAddr(),handle);
-
         imgv.setImageBitmap(plateInfo.bitmap);
-        long diff = System.currentTimeMillis() - currentTime1;
         resbox.setText("识别结果:"+plateInfo.plateName);
+        long diff = System.currentTimeMillis() - currentTime1;
 
         runtimebox.setText(String.valueOf(diff)+"ms");
 
