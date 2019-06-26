@@ -265,7 +265,7 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
     {
 
         float dp_asp  = dp/10.f;
-        imgv.setImageBitmap(bmp);
+//        imgv.setImageBitmap(bmp);
         Mat mat_src = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
 
         float new_w = bmp.getWidth()*dp_asp;
@@ -278,7 +278,7 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
 
         PlateInfo plateInfo = PlateRecognition.PlateInfoRecognization(mat_src.getNativeObjAddr(),handle);
 
-//        imgv.setImageBitmap(plateInfo.bitmap);
+        imgv.setImageBitmap(plateInfo.bitmap);
         long diff = System.currentTimeMillis() - currentTime1;
         resbox.setText("识别结果:"+plateInfo.plateName);
 

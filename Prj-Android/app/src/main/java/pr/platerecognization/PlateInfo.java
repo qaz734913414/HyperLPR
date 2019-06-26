@@ -18,13 +18,13 @@ public class PlateInfo {
     /**
      * 车牌号图片
      */
-//    public Bitmap bitmap;
+    public Bitmap bitmap;
 
     public PlateInfo() {
     }
 
-//    public PlateInfo(String plateName, Bitmap bitmap) {
-//        this.plateName = plateName;
-//        this.bitmap = bitmap;
-//    }
+    public PlateInfo(String plateName, Bitmap bitmap) {
+        this.plateName = plateName;
+        this.bitmap = bitmap;
+    }
 }

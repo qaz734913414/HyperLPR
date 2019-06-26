@@ -7,70 +7,69 @@
 
 #include <opencv2/opencv.hpp>
 
-//using namespace cv;
+using namespace cv;
 #define LOG_TAG "System.out"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-/*
-jobject mat_to_bitmap(JNIEnv * env, Mat& src, bool needPremultiplyAlpha, jobject bitmap_config) {
+jobject mat_to_bitmap(JNIEnv * env, Mat & src, bool needPremultiplyAlpha, jobject bitmap_config){
 
-    jclass java_bitmap_class = (jclass) env->FindClass("android/graphics/Bitmap");
+    jclass java_bitmap_class = (jclass)env->FindClass("android/graphics/Bitmap");
     jmethodID mid = env->GetStaticMethodID(java_bitmap_class,
-                                           "createBitmap",
-                                           "(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;");
+                                           "createBitmap", "(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;");
 
     jobject bitmap = env->CallStaticObjectMethod(java_bitmap_class,
-                                                 mid, src.size().width, src.size().height,
-                                                 bitmap_config);
-    AndroidBitmapInfo info;
-    void *pixels = 0;
+                                                 mid, src.size().width, src.size().height, bitmap_config);
+    AndroidBitmapInfo  info;
+    void* pixels = 0;
 
     try {
+        //validate
         CV_Assert(AndroidBitmap_getInfo(env, bitmap, &info) >= 0);
         CV_Assert(src.type() == CV_8UC1 || src.type() == CV_8UC3 || src.type() == CV_8UC4);
         CV_Assert(AndroidBitmap_lockPixels(env, bitmap, &pixels) >= 0);
         CV_Assert(pixels);
-        if (info.format == ANDROID_BITMAP_FORMAT_RGBA_8888) {
+
+        //type mat
+        if(info.format == ANDROID_BITMAP_FORMAT_RGBA_8888){
             Mat tmp(info.height, info.width, CV_8UC4, pixels);
-            if (src.type() == CV_8UC1) {
+            if(src.type() == CV_8UC1){
                 cvtColor(src, tmp, CV_GRAY2RGBA);
-            } else if (src.type() == CV_8UC3) {
+            } else if(src.type() == CV_8UC3){
                 cvtColor(src, tmp, CV_RGB2RGBA);
-            } else if (src.type() == CV_8UC4) {
-                if (needPremultiplyAlpha) {
+            } else if(src.type() == CV_8UC4){
+                if(needPremultiplyAlpha){
                     cvtColor(src, tmp, COLOR_RGBA2mRGBA);
-                } else {
+                }else{
                     src.copyTo(tmp);
                 }
             }
-        } else {
-            // info.format == ANDROID_BITMAP_FORMAT_RGB_565
+
+        } else{
             Mat tmp(info.height, info.width, CV_8UC2, pixels);
-            if (src.type() == CV_8UC1) {
+            if(src.type() == CV_8UC1){
                 cvtColor(src, tmp, CV_GRAY2BGR565);
-            } else if (src.type() == CV_8UC3) {
+            } else if(src.type() == CV_8UC3){
                 cvtColor(src, tmp, CV_RGB2BGR565);
-            } else if (src.type() == CV_8UC4) {
+            } else if(src.type() == CV_8UC4){
                 cvtColor(src, tmp, CV_RGBA2BGR565);
             }
         }
         AndroidBitmap_unlockPixels(env, bitmap);
         return bitmap;
-    } catch (cv::Exception e) {
+    } catch(cv::Exception e){
         AndroidBitmap_unlockPixels(env, bitmap);
         jclass je = env->FindClass("org/opencv/core/CvException");
-        if (!je) je = env->FindClass("java/lang/Exception");
+        if(!je) je = env->FindClass("java/lang/Exception");
         env->ThrowNew(je, e.what());
         return bitmap;
-    } catch (...) {
+    } catch (...){
         AndroidBitmap_unlockPixels(env, bitmap);
         jclass je = env->FindClass("java/lang/Exception");
         env->ThrowNew(je, "Unknown exception in JNI code {nMatToBitmap}");
         return bitmap;
     }
-}*/
-
+}
 
 std::string jstring2str(JNIEnv* env, jstring jstr)
 {
@@ -193,7 +192,7 @@ Java_pr_platerecognization_PlateRecognition_PlateInfoRecognization(
     env->SetObjectField(plateInfoObj,fid_plate_name,env->NewStringUTF(plateInfo.getPlateName().c_str()));
 
     //识别区域
-/*    Mat src = plateInfo.getPlateImage();
+    Mat src = plateInfo.getPlateImage();
 
     jclass java_bitmap_class = (jclass)env->FindClass("android/graphics/Bitmap$Config");
     jmethodID bitmap_mid = env->GetStaticMethodID(java_bitmap_class,
@@ -202,7 +201,7 @@ Java_pr_platerecognization_PlateRecognition_PlateInfoRecognization(
 
     jfieldID fid_bitmap = env->GetFieldID(plateInfo_class, "bitmap","Landroid/graphics/Bitmap;");
     jobject _bitmap = mat_to_bitmap(env, src, false, bitmap_config);
-    env->SetObjectField(plateInfoObj,fid_bitmap, _bitmap);*/
+    env->SetObjectField(plateInfoObj,fid_bitmap, _bitmap);
 
     return plateInfoObj;
 
