@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
 
 //    public  PlateRecognition pr;
 
-    public long handle;
+    public static long handle;
     private final String TAG = this.getClass().toString();
 
 
@@ -178,8 +178,9 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
                 return cursor.getString(index);
             }
         } finally {
-            if (cursor != null)
+            if (cursor != null) {
                 cursor.close();
+            }
         }
         return null;
     }
@@ -261,7 +262,7 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
         return null;
     }
 
-    public  void SimpleRecog(Bitmap bmp,int dp)
+    public void SimpleRecog(Bitmap bmp,int dp)
     {
 
         float dp_asp  = dp/10.f;
@@ -287,6 +288,28 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
 
 
     }
+
+    public  static PlateInfo simpleRecog(Bitmap bmp,int dp)
+    {
+
+        float dp_asp  = dp/10.f;
+//        imgv.setImageBitmap(bmp);
+        Mat mat_src = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
+
+        float new_w = bmp.getWidth()*dp_asp;
+        float new_h = bmp.getHeight()*dp_asp;
+        Size sz = new Size(new_w,new_h);
+        Utils.bitmapToMat(bmp, mat_src);
+        Imgproc.resize(mat_src,mat_src,sz);
+        long currentTime1 = System.currentTimeMillis();
+//        String res = PlateRecognition.SimpleRecognization(mat_src.getNativeObjAddr(),handle);
+//        resbox.setText("识别结果:"+res);
+
+        PlateInfo plateInfo = PlateRecognition.PlateInfoRecognization(mat_src.getNativeObjAddr(),handle);
+        return plateInfo;
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -338,6 +361,7 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
         }
         btn = (Button)findViewById(R.id.button);
         recogBtn = (Button)findViewById(R.id.button_recog);
+        findViewById(R.id.button_recog_now).setOnClickListener(this);
         imgv = (ImageView)findViewById(R.id.imageView);
         resbox = (TextView)findViewById(R.id.textView);
         sb = (SeekBar)findViewById(R.id.seek);
@@ -388,6 +412,12 @@ public class MainActivity extends Activity implements AlertDialog.OnClickListene
                if(latestBitmap!=null){
                    SimpleRecog(latestBitmap,sb.getProgress());
                }
+                break;
+            case R.id.button_recog_now:
+                Intent intent = new Intent(this, CameraActivity.class);
+                startActivity(intent);
+                break;
+            default:
                 break;
         }
     }

@@ -184,7 +184,6 @@ Java_pr_platerecognization_PlateRecognition_PlateInfoRecognization(
         //可信度
         if (one.confidence>0.7) {
             plateInfo = one;
-            plateInfo = list_res.at(0);
             //车牌号
             jfieldID fid_plate_name  = env->GetFieldID(plateInfo_class,"plateName","Ljava/lang/String;");
             env->SetObjectField(plateInfoObj,fid_plate_name,env->NewStringUTF(plateInfo.getPlateName().c_str()));
